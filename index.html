@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Participation">
+  <title>Participation Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Auth screen (shown until Dropbox is connected) -->
+  <div id="auth-screen">
+    <div class="auth-content">
+      <h1>Participation Tracker</h1>
+      <p>Connect to Dropbox to access your participation data.</p>
+      <button id="auth-btn">Connect to Dropbox</button>
+      <p id="auth-status"></p>
+    </div>
+  </div>
+
+  <!-- Main app (hidden until authenticated) -->
+  <div id="app" style="display:none">
+
+    <!-- Course tabs -->
+    <nav id="course-tabs"></nav>
+
+    <!-- Timer bar (green → orange after 3 min) -->
+    <div id="timer-bar"></div>
+
+    <!-- Loading indicator -->
+    <div id="loading" style="display:none">
+      <div class="loading-spinner"></div>
+      <span>Loading course data...</span>
+    </div>
+
+    <!-- Scrollable grid container -->
+    <div id="grid-container">
+      <table id="grid-table">
+        <thead id="grid-header"></thead>
+        <tbody id="grid-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Mode toggle (fixed, right edge, vertically centered) -->
+    <div id="mode-toggle">
+      <button class="mode-btn active" data-mode="present">Present</button>
+      <button class="mode-btn" data-mode="late">Late</button>
+      <button class="mode-btn" data-mode="undo">Undo</button>
+    </div>
+
+    <!-- Photo popup overlay -->
+    <div id="photo-popup" style="display:none">
+      <img id="photo-popup-img" src="" alt="Student Photo">
+      <p id="photo-popup-name"></p>
+    </div>
+
+  </div>
+
+  <!-- Dropbox SDK from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/dropbox@10.34.0/dist/Dropbox-sdk.min.js"></script>
+  <script src="dropbox-auth.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
