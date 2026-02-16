@@ -620,8 +620,8 @@ function showPhotoPopup(student, course) {
   };
   popup.addEventListener('click', close);
 
-  // Auto-close after 10 seconds
-  autoCloseTimer = setTimeout(close, 10000);
+  // Auto-close after 8 seconds
+  autoCloseTimer = setTimeout(close, 8000);
 }
 
 // ============================================================
