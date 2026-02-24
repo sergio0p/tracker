@@ -116,7 +116,7 @@ async function saveCourseData(course, data) {
   // Clean empty sessions: remove sessions where all records are absent with count 0
   data.sessions = data.sessions.filter(session => {
     const records = Object.values(session.records || {});
-    return records.some(r => r.status !== 'absent' || r.count > 0);
+    return records.some(r => r.status !== 'absent' || Number(r.count) > 0);
   });
 
   const json = JSON.stringify(data, null, 2);
@@ -168,8 +168,9 @@ async function loadPhoto(course, studentId) {
  */
 function calculateSessionPoints(record) {
   if (!record || record.status === 'absent') return 0;
-  if (record.status === 'late') return 0.5 + (record.count - 1);
-  return record.count; // present
+  const count = Number(record.count) || 0;
+  if (record.status === 'late') return 0.5 + (count - 1);
+  return count; // present
 }
 
 /**
@@ -189,7 +190,7 @@ function getStudentNameColor(studentId, activeSessions) {
   const recent = activeSessions.slice(-3);
   const counts = recent.map(s => {
     const rec = s.records[String(studentId)];
-    return rec ? rec.count : 0;
+    return rec ? Number(rec.count) || 0 : 0;
   });
 
   if (counts.length === 3 && counts[0] === 0 && counts[1] === 0 && counts[2] === 0) {
@@ -249,18 +250,7 @@ function handleCellTap(courseData, course, session, studentId) {
     session.start_time = new Date().toISOString();
   }
 
-  let effectiveMode = state.mode;
-
-  // 3-minute timer rule: auto-switch present→late after 3 minutes
-  // Only for absent students being marked for the first time
-  if (effectiveMode === 'present' && session.start_time && record.status === 'absent') {
-    const elapsed = (Date.now() - new Date(session.start_time).getTime()) / 1000;
-    if (elapsed > TIMER_MINUTES * 60) {
-      effectiveMode = 'late';
-    }
-  }
-
-  switch (effectiveMode) {
+  switch (state.mode) {
     case 'present':
       // Port of _increment (live_session_view.py:771-797)
       if (record.status === 'absent') {
@@ -268,7 +258,7 @@ function handleCellTap(courseData, course, session, studentId) {
         record.count = 1;
       } else {
         // Already present or late: just increment count (keep status)
-        record.count += 1;
+        record.count = Number(record.count) + 1;
       }
       break;
 
@@ -285,9 +275,10 @@ function handleCellTap(courseData, course, session, studentId) {
 
     case 'undo':
       // Port of _decrement (live_session_view.py:820-835)
+      // Use == for type coercion (count may be string from JSON)
       if (record.count > 1) {
-        record.count -= 1;
-      } else if (record.count === 1) {
+        record.count = Number(record.count) - 1;
+      } else if (record.count == 1) {
         record.count = 0;
         record.status = 'absent';
       }
