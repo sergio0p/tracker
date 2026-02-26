@@ -340,9 +340,15 @@ function renderGrid(courseData, course) {
   thead.innerHTML = '';
   const headerRow = document.createElement('tr');
 
-  ['', 'Name', 'Lvl', 'Major'].forEach(h => {
+  [
+    { text: '', cls: 'photo-header' },
+    { text: 'Name', cls: 'name-header' },
+    { text: 'Lvl', cls: 'info-header' },
+    { text: 'Major', cls: 'info-header' }
+  ].forEach(h => {
     const th = document.createElement('th');
-    th.textContent = h;
+    th.textContent = h.text;
+    th.classList.add(h.cls);
     headerRow.appendChild(th);
   });
 
@@ -351,6 +357,7 @@ function renderGrid(courseData, course) {
     const isToday = (date === today);
     th.textContent = isToday ? 'TODAY' : formatDateDisplay(date);
     if (isToday) th.classList.add('today-header');
+    else th.classList.add('past-header');
     headerRow.appendChild(th);
   });
 
