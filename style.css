@@ -141,9 +141,8 @@ body {
   overflow-x: auto;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  height: calc(100vh - 57px);
+  height: calc(100vh - 57px - 80px); /* subtract tab bar + mode toggle height */
   padding-bottom: env(safe-area-inset-bottom);
-  padding-right: 96px; /* Space for mode toggle */
 }
 
 /* --- Grid Table --- */
@@ -285,27 +284,28 @@ th.today-header {
   opacity: 0.85;
 }
 
-/* --- Mode Toggle (Fixed, Right Edge) --- */
+/* --- Mode Toggle (Fixed, Bottom Center) --- */
 #mode-toggle {
   position: fixed;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
   z-index: 200;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  padding: 6px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px 12px 0 0;
+  padding: 6px 10px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.15);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
 .mode-btn {
-  width: 76px;
-  height: 64px;
+  width: 90px;
+  height: 52px;
   border: 2px solid #d1d1d6;
   border-radius: 10px;
   font-size: 13px;
@@ -375,7 +375,7 @@ th.today-header {
 /* --- Toast Notifications --- */
 .toast {
   position: fixed;
-  bottom: 40px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 24px;
@@ -455,9 +455,9 @@ th.today-header {
     display: none !important;
   }
 
-  /* Grid: no horizontal scroll needed, fill the screen */
+  /* Grid: fill the screen */
   #grid-container {
-    padding-right: 72px; /* smaller toggle on mobile */
+    padding-right: 0;
   }
 
   #grid-table {
@@ -480,14 +480,14 @@ th.today-header {
 
   /* Smaller mode toggle for phone */
   #mode-toggle {
-    right: 4px;
-    padding: 4px;
+    padding: 4px 6px;
+    padding-bottom: calc(4px + env(safe-area-inset-bottom));
     gap: 3px;
   }
 
   .mode-btn {
-    width: 60px;
-    height: 50px;
+    width: 72px;
+    height: 44px;
     font-size: 11px;
   }
 
